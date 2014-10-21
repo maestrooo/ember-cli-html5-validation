@@ -50,7 +50,7 @@ export default Ember.Component.extend({
    */
   keyDown: function(event) {
     // Enter key
-    if (event.keyCode === 13 && event.target.tagName !== 'textarea') {
+    if (event.keyCode === 13 && event.target.tagName.toLowerCase() !== 'textarea') {
       this.submit();
 
       // Prevent other buttons to accidentally submit

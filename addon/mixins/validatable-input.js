@@ -129,14 +129,15 @@ export default Ember.Mixin.create({
    */
   renderErrorMessage: function() {
     var element = this.$(),
+        parent = element.parent(),
         errorMessage = this.get('errorMessage');
 
     if (null === errorMessage) {
-      element.removeClass('invalid');
-      element.siblings('.input-error').remove();
+      parent.removeClass('has-error');
+      element.next('.input-error').remove();
     } else {
-      element.siblings('.input-error').remove();
-      element.addClass('invalid');
+      parent.addClass('has-error');
+      element.next('.input-error').remove();
       element.after('<p class="input-error">' + errorMessage + '</p>');
     }
   }.observes('errorMessage'),
