@@ -1,5 +1,5 @@
 {
-  "name": "ember-html5-validation",
+  "name": "ember-cli-html5-validation",
   "dependencies": {
     "handlebars": "~1.3.0",
     "jquery": "~2.0",
