@@ -79,14 +79,14 @@ export default Ember.Mixin.create({
    * @returns {void}
    */
   attachValidationListener: function() {
-    Ember.$(this.get('element')).on('invalid', Ember.run.bind(this, this.validate));
+    Ember.$(this.get('element')).on('invalid focusout', Ember.run.bind(this, this.validate));
   }.on('didInsertElement'),
 
   /**
    * @returns {void}
    */
   detachValidationListener: function() {
-    Ember.$(this.get('element')).off('invalid');
+    Ember.$(this.get('element')).off('invalid focusout');
   }.on('willDestroyElement'),
 
   /**
@@ -108,7 +108,7 @@ export default Ember.Mixin.create({
       this.set('errorMessage', null);
       input.setCustomValidity('');
     }
-  }.on('focusOut'),
+  },
 
   /**
    * Set a custom error message for the input. Note that we set the error message directly, as well as we

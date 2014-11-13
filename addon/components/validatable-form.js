@@ -14,9 +14,9 @@ export default Ember.Component.extend({
   /**
    * Prevent the built-in browser navigation error messages to pop up
    *
-   * @type {boolean}
+   * @type {string}
    */
-  novalidate: true,
+  novalidate: 'novalidate',
 
   /**
    * Optional Ember-Data model from where to fetch server-side errors
