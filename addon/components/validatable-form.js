@@ -34,7 +34,7 @@ export default Ember.Component.extend({
     var form = this.get('element'),
         model = this.get('model');
 
-    if (form.checkValidity() && model.get('isValid') !== false && model.get('isDirty') !== false) {
+    if (form.checkValidity() && this.get('model.isValid') !== false) {
       this.sendAction('action', model);
     } else {
       this.scrollToFirstError();
