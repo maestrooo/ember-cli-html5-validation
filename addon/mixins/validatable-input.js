@@ -12,6 +12,13 @@ export default Ember.Mixin.create({
   attributeBindings: ['title'],
 
   /**
+   * Check if the input has already been validated at least once
+   *
+   * @type {boolean}
+   */
+  wasValidated: false,
+
+  /**
    * Decide if we show the native browser error messages
    *
    * @type {boolean}
@@ -86,7 +93,7 @@ export default Ember.Mixin.create({
    * @returns {void}
    */
   detachValidationListener: function() {
-    Ember.$(this.get('element')).off('invalid focusout');
+    Ember.$(this.get('element')).off('invalid focusout keyup');
   }.on('willDestroyElement'),
 
   /**
@@ -107,6 +114,14 @@ export default Ember.Mixin.create({
     } else {
       this.set('errorMessage', null);
       input.setCustomValidity('');
+    }
+
+    // If the input was never validated, we attach an additional listener so that validation is
+    // run also on keyup. This makes the UX better as it removes error message as you type when
+    // you try to fix the errors
+    if (!this.get('wasValidated')) {
+      Ember.$(input).on('keyup', Ember.run.bind(this, this.validate));
+      this.set('wasValidated', true);
     }
   },
 
