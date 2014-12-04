@@ -86,7 +86,7 @@ export default Ember.Mixin.create({
    * @returns {void}
    */
   attachValidationListener: function() {
-    Ember.$(this.get('element')).on('invalid focusout', Ember.run.bind(this, this.validate));
+    Ember.$(this.get('element')).on('invalid focusout change', Ember.run.bind(this, this.validate));
   }.on('didInsertElement'),
 
   /**
@@ -103,6 +103,8 @@ export default Ember.Mixin.create({
    */
   validate: function() {
     var input = this.get('element');
+
+    console.log(this);
 
     // According to spec, inputs that have "formnovalidate" should bypass any validation
     if (input.hasAttribute('formnovalidate')) {
