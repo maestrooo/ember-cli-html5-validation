@@ -104,8 +104,6 @@ export default Ember.Mixin.create({
   validate: function() {
     var input = this.get('element');
 
-    console.log(this);
-
     // According to spec, inputs that have "formnovalidate" should bypass any validation
     if (input.hasAttribute('formnovalidate')) {
       return;
