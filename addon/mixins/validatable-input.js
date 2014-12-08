@@ -109,9 +109,11 @@ export default Ember.Mixin.create({
       return;
     }
 
-    var content = Ember.$.trim(Ember.$(input).val());
-    if(content.length === 0) {
-      Ember.$(input).val('');
+    if(input.tagName.toLowerCase() === 'textarea') {
+      var content = Ember.$.trim(Ember.$(input).val());
+      if(content.length === 0) {
+        Ember.$(input).val('');
+      }
     }
 
     if (!input.validity.valid && !input.validity.customError) {
