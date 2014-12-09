@@ -109,6 +109,14 @@ export default Ember.Mixin.create({
       return;
     }
 
+    // Validate Textarea with proper text and not accept only blank spaces, only new line characters.
+    if(input.tagName.toLowerCase() === 'textarea') {
+      var content = Ember.$.trim(Ember.$(input).val());
+      if(content.length === 0) {
+        Ember.$(input).val('');
+      }
+    }
+
     if (!input.validity.valid && !input.validity.customError) {
       this.set('errorMessage', this.getErrorMessage());
     } else {
