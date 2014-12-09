@@ -102,18 +102,21 @@ export default Ember.Mixin.create({
    * @returns {void}
    */
   validate: function() {
-    var input = this.get('element');
+    var input = this.get('element'),
+        jQueryElement = Ember.$(input);
 
     // According to spec, inputs that have "formnovalidate" should bypass any validation
     if (input.hasAttribute('formnovalidate')) {
       return;
     }
 
-    // Validate Textarea with proper text and not accept only blank spaces, only new line characters.
-    if(input.tagName.toLowerCase() === 'textarea') {
-      var content = Ember.$.trim(Ember.$(input).val());
+    // Textareas do not support "pattern" attribute. As a consequence, if you set a "required" attribute
+    // and only add blank spaces or new lines, then it is considered as valid (although it makes little sense).
+    if(input.tagName.toLowerCase() === 'textarea' && input.hasAttribute('required')) {
+      var content = Ember.$.trim(jQueryElement.val());
+
       if(content.length === 0) {
-        Ember.$(input).val('');
+        jQueryElement.val('');
       }
     }
 
@@ -128,7 +131,7 @@ export default Ember.Mixin.create({
     // run also on keyup. This makes the UX better as it removes error message as you type when
     // you try to fix the errors
     if (!this.get('wasValidated')) {
-      Ember.$(input).on('keyup', Ember.run.bind(this, this.validate));
+      jQueryElement.on('keyup', Ember.run.bind(this, this.validate));
       this.set('wasValidated', true);
     }
   },
@@ -161,7 +164,7 @@ export default Ember.Mixin.create({
     } else {
       parent.addClass('has-error');
       element.next('.input-error').remove();
-      element.after('<p class="input-error">' + errorMessage + '</p>');
+      element.after('<p class="input-error" role="alert">' + errorMessage + '</p>');
     }
   }.observes('errorMessage'),
 
