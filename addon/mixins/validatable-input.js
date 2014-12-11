@@ -93,7 +93,7 @@ export default Ember.Mixin.create({
    * @returns {void}
    */
   detachValidationListener: function() {
-    Ember.$(this.get('element')).off('invalid focusout keyup');
+    Ember.$(this.get('element')).off('invalid focusout keyup change');
   }.on('willDestroyElement'),
 
   /**
