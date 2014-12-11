@@ -86,14 +86,14 @@ export default Ember.Mixin.create({
    * @returns {void}
    */
   attachValidationListener: function() {
-    Ember.$(this.get('element')).on('invalid focusout change', Ember.run.bind(this, this.validate));
+    Ember.$(this.get('element')).on('invalid change', Ember.run.bind(this, this.validate));
   }.on('didInsertElement'),
 
   /**
    * @returns {void}
    */
   detachValidationListener: function() {
-    Ember.$(this.get('element')).off('invalid focusout keyup change');
+    Ember.$(this.get('element')).off();
   }.on('willDestroyElement'),
 
   /**
