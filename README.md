@@ -1,6 +1,7 @@
 # Ember CLI HTML5 Validation
 
-This Ember CLI addon aims to provide a simple form validation feature.
+This Ember CLI addon aims to provide a simple form validation feature. It also includes a simple async button that
+is aims to be used with forms for better user experience.
 
 ## Major limitations
 
@@ -158,3 +159,24 @@ If you have an input that is required only if a checkbox is checked, you can do 
 While this library is mostly aims to perform quick validations with minimal overhead, HTML5 allows you to provide
 custom logic and set custom message by calling the `setCustomValidity` method on your input. When you call this method,
 an `invalid` event will be triggered and the `ValidatableInput` will automatically show it.
+
+### Async Button
+
+Ember-CLI-HTML5-Validation now comes with a minimal async button. This component can be used for your forms to provide
+immediate feedback when the form is submitting, and then comes into an error or success state. Whenever it enters into
+error or success state, it will transition back to initial state after 1.5s.
+
+Here are the classes added to the button depending on the status:
+
+* Loading: `is-loading` class is added
+* Error: `is-error` class is added
+* Success: `is-success` class is added
+
+You can override the default template by setting your own template for the `async-button` component. Here is
+an example usage:
+
+```html
+{{async-button class='button' value='Sign Up' isLoading=isSaving isError=isError}}
+```
+
+`isLoading` and `isError` property can comes either from computed properties or your models.
