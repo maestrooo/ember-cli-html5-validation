@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-html5-validation",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "directories": {
     "doc": "doc",
     "test": "tests"
