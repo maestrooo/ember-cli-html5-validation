@@ -86,7 +86,11 @@ export default Ember.Mixin.create({
    * @returns {void}
    */
   attachValidationListener: function() {
-    Ember.$(this.get('element')).on('invalid change', Ember.run.bind(this, this.validate));
+    if (this.get('inputTagName') === 'select') {
+      Ember.$(this.get('element')).on('invalid change', Ember.run.bind(this, this.validate));
+    } else {
+      Ember.$(this.get('element')).on('invalid focusout', Ember.run.bind(this, this.validate));
+    }
   }.on('didInsertElement'),
 
   /**
@@ -95,6 +99,13 @@ export default Ember.Mixin.create({
   detachValidationListener: function() {
     Ember.$(this.get('element')).off();
   }.on('willDestroyElement'),
+
+  /**
+   * @returns {String}
+   */
+  inputTagName: function() {
+    return this.get('element').tagName.toLowerCase();
+  }.property(),
 
   /**
    * Validate the input whenever it looses focus
@@ -112,7 +123,7 @@ export default Ember.Mixin.create({
 
     // Textareas do not support "pattern" attribute. As a consequence, if you set a "required" attribute
     // and only add blank spaces or new lines, then it is considered as valid (although it makes little sense).
-    if(input.tagName.toLowerCase() === 'textarea' && input.hasAttribute('required')) {
+    if(this.get('inputTagName') === 'textarea' && input.hasAttribute('required')) {
       var content = Ember.$.trim(jQueryElement.val());
 
       if(content.length === 0) {
