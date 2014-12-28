@@ -120,11 +120,11 @@ the validatable form:
 ```html
 {{#validatable-form action='save' model=model}}
   <div class="form-control">
-    {{input name='first-name' value=firstName required='required'}}
+    {{input id='first-name' value=firstName required='required'}}
   </div>
 
   <div class="form-control">
-    {{input name='last-name' value=lastName required='required'}}
+    {{input id='last-name' value=lastName required='required'}}
   </div>
 
   <input type="submit"}}
@@ -139,6 +139,22 @@ This will provide two things:
 When client validation successfully passes, the action is submitted. In case of errors that are returned by server,
 Ember CLI HTML5 Validation will automatically extracts errors (assuming that errors hash is formatted properly) and
 will show them along corresponding fields.
+
+For this to work, you must configure Ember-Data to properly creates a DS.InvalidError object on failure (this is done
+out of the box if you are using ActiveModel Adapter). Furthermore, you must add an "id" on each input, that is the
+dasherized version of the property. For instance, if your server returns the following payload:
+
+```json
+{
+  "errors": {
+    "first_name": [
+      "Your First Name is not valid (lol)"
+    ]
+  }
+}
+```
+
+Your input must have an id whose value is "first-name".
 
 > This is currently a bit hacky and I want to make this more efficient / allow to work on associations.
 
