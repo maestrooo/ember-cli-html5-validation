@@ -67,25 +67,22 @@ export default Ember.Component.extend({
    * @returns {void}
    */
   extractServerErrors: function() {
-    var errors = this.get('model.errors'),
-        childViews = this.get('childViews');
+    var errors = this.get('model.errors');
 
-    // This thing can be pretty inefficient if you have lot of form elements... we need to find
-    // a better way!
+    // For now, we assume that there are "id" properly set and that they match the attribute name
     errors.forEach(function(item) {
       var attribute = Ember.String.dasherize(item.attribute),
-        childViewLength = childViews.get('length');
+          element = Ember.$.find('#' + attribute);
 
-      for (var i = 0 ; i !== childViewLength ; ++i) {
-        if (attribute === childViews[i].get('elementId')) {
-          childViews[i].setCustomErrorMessage(item.message);
-          break;
-        }
+      if (element.length > 0) {
+        element[0].setCustomValidity(item.message);
       }
     });
 
+    // Force validation of the form
+    this.get('element').checkValidity();
     this.scrollToFirstError();
-  }.observes('model.errors.length'),
+  }.observes('model.errors.[]'),
 
   /**
    * Scroll to the first input field that does not pass the validation

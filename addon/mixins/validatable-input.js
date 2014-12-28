@@ -131,32 +131,22 @@ export default Ember.Mixin.create({
       }
     }
 
-    if (!input.validity.valid && !input.validity.customError) {
+    if (!input.validity.valid) {
       this.set('errorMessage', this.getErrorMessage());
     } else {
       this.set('errorMessage', null);
-      input.setCustomValidity('');
     }
+
+    // We reset the state if we had any custom error, so that they do not "stick" around
+    input.setCustomValidity('');
 
     // If the input was never validated, we attach an additional listener so that validation is
     // run also on keyup. This makes the UX better as it removes error message as you type when
     // you try to fix the errors
     if (!this.get('wasValidated')) {
-      jQueryElement.on('keyup', Ember.run.bind(this, this.validate));
+      jQueryElement.off('focusout').on('keyup', Ember.run.bind(this, this.validate));
       this.set('wasValidated', true);
     }
-  },
-
-  /**
-   * Set a custom error message for the input. Note that we set the error message directly, as well as we
-   * set the error using setCustomValidity, so that a call to checkValidate evaluate to false
-   *
-   * @type {string} error
-   * @returns {void}
-   */
-  setCustomErrorMessage: function(error) {
-    this.set('errorMessage', error);
-    this.get('element').setCustomValidity(error);
   },
 
   /**
@@ -187,8 +177,9 @@ export default Ember.Mixin.create({
   getErrorMessage: function() {
     var target = this.get('element');
 
-    // If user want to use native browser error messages, we directly return
-    if (this.get('useBrowserMessages')) {
+    // If user want to use native browser error messages, we directly return. We also return the stored
+    // message in case of custom error
+    if (this.get('useBrowserMessages') || target.validity.customError) {
       return target.validationMessage;
     }
 
