@@ -9,7 +9,7 @@ export default Ember.Component.extend({
   /**
    * @type {Array}
    */
-  classNameBindings: [':async-button', 'isLoading', 'isErrorOneWay:is-error', 'isSuccess'],
+  classNameBindings: [':async-button', 'isLoading:is-loading', 'hasErrorClass:is-error', 'hasSuccessClass:is-success'],
 
   /**
    * @type {Array}
@@ -19,12 +19,19 @@ export default Ember.Component.extend({
   /**
    * @type {boolean}
    */
-  disabled: Ember.computed.any('isLoading', 'isErrorOneWay', 'isSuccess'),
+  disabled: Ember.computed.not('isDefault'),
 
   /**
    * @type {string}
    */
   type: 'submit',
+
+  /**
+   * Is the button in its default state?
+   *
+   * @type {boolean}
+   */
+  isDefault: true,
 
   /**
    * Is the button currently loading?
@@ -34,35 +41,25 @@ export default Ember.Component.extend({
   isLoading: false,
 
   /**
-   * Is the button in an error state?
-   *
-   * @type {boolean}
-   */
-  isError: false,
-
-  /**
-   * @type {boolean}
-   */
-  isErrorOneWay: Ember.computed.oneWay('isError'),
-
-  /**
    * Is the button in a valid state?
    *
    * @type {boolean}
    */
-  isSuccess: false,
+  isValid: false,
 
   /**
-   * When the button enters into "error" state, we introduce a small timer of 1.5 second, and then
-   * get back to original state
+   * @returns {Boolean}
    */
-  observesError: function() {
-    if (this.get('isErrorOneWay')) {
-      Ember.run.later(this, function() {
-        this.set('isErrorOneWay', false);
-      }, 1500);
-    }
-  }.observes('isErrorOneWay'),
+  hasErrorClass: function() {
+    return !this.get('isDefault') && !this.get('isValid');
+  }.property('isDefault', 'isValid').readOnly(),
+
+  /**
+   * @returns {Boolean}
+   */
+  hasSuccessClass: function() {
+    return !this.get('isDefault') && this.get('isValid');
+  }.property('isDefault', 'isValid').readOnly(),
 
   /**
    * When the isLoading goes back to "false", we check if the button is in an error state. If that's
@@ -70,15 +67,11 @@ export default Ember.Component.extend({
    */
   observesLoading: function() {
     if (!this.get('isLoading')) {
-      if (this.get('isError')) {
-        this.set('isErrorOneWay', true);
-      } else {
-        this.set('isSuccess', true);
+      this.set('isDefault', false);
 
-        Ember.run.later(this, function() {
-          this.set('isSuccess', false);
-        }, 1500);
-      }
+      Ember.run.later(this, function() {
+        this.set('isDefault', true);
+      }, 1500);
     }
   }.observes('isLoading')
 });

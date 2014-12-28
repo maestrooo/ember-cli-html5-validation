@@ -1,13 +1,13 @@
 {{#if isLoading}}
   Loading...
 {{else}}
-  {{#if isErrorOneWay}}
-    Error!
+  {{#if isDefault}}
+    {{value}}
   {{else}}
-    {{#if isSuccess}}
+    {{#if isValid}}
       Success!
     {{else}}
-      {{value}}
+      Error!
     {{/if}}
   {{/if}}
 {{/if}}

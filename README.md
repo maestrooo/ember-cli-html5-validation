@@ -176,7 +176,7 @@ You can override the default template by setting your own template for the `asyn
 an example usage:
 
 ```html
-{{async-button class='button' value='Sign Up' isLoading=isSaving isError=isError}}
+{{async-button class='button' value='Sign Up' isLoading=isSaving isValid=isValid}}
 ```
 
-`isLoading` and `isError` property can comes either from computed properties or your models.
+`isLoading` and `isValid` property can comes either from computed properties or your models.
