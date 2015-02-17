@@ -1,0 +1,13 @@
+{{#if isLoading}}
+  Loading...
+{{else}}
+  {{#if isDefault}}
+    {{value}}
+  {{else}}
+    {{#if isValid}}
+      Success!
+    {{else}}
+      Error!
+    {{/if}}
+  {{/if}}
+{{/if}}
