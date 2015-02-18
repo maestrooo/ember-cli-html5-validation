@@ -71,18 +71,37 @@ export default Ember.Component.extend({
 
     // For now, we assume that there are "id" properly set and that they match the attribute name
     errors.forEach(function(item) {
-      var attribute = Ember.String.dasherize(item.attribute),
-          element = Ember.$.find('#' + attribute);
-
-      if (element.length > 0) {
-        element[0].setCustomValidity(item.message);
-      }
-    });
+      this.renderServerError(item.attribute, item.message);
+    }, this);
 
     // Force validation of the form
     this.get('element').checkValidity();
     this.scrollToFirstError();
   }.observes('model.errors.[]'),
+
+  /**
+   * @param {String} item
+   * @param {String|Object} message
+   */
+  renderServerError: function(item, message) {
+    var attribute = Ember.String.dasherize(item),
+      messageType = Ember.typeOf(message);
+
+    // If message is itself an object, this means it is a nested error
+    if (messageType === 'object') {
+      for (var key in message) {
+        if (message.hasOwnProperty(key)) {
+          this.renderServerError(item + '[' + key + ']', message[key]);
+        }
+      }
+    } else {
+      var element = Ember.$.find('#' + attribute.replace(/(:|\.|\[|\]|,)/g, '\\$1'));
+
+      if (element.length > 0) {
+        element[0].setCustomValidity(messageType === 'array' ? message[0] : message);
+      }
+    }
+  },
 
   /**
    * Scroll to the first input field that does not pass the validation
