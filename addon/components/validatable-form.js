@@ -31,11 +31,10 @@ export default Ember.Component.extend({
    * @returns {boolean}
    */
   submit: function() {
-    var form = this.get('element'),
-        model = this.get('model');
+    var form = this.get('element');
 
-    if (form.checkValidity() && this.get('model.isValid') !== false) {
-      this.sendAction('action', model);
+    if (form.checkValidity()) {
+      this.sendAction('action', this.get('model'));
     } else {
       this.scrollToFirstError();
     }
