@@ -74,8 +74,8 @@ export default Ember.Component.extend({
     }, this);
 
     // Force validation of the form
-    this.get('element').checkValidity();
     this.scrollToFirstError();
+    this.get('element').checkValidity();
   }.observes('model.errors.[]'),
 
   /**
@@ -84,13 +84,13 @@ export default Ember.Component.extend({
    */
   renderServerError: function(item, message) {
     var attribute = Ember.String.dasherize(item),
-      messageType = Ember.typeOf(message);
+        messageType = Ember.typeOf(message);
 
     // If message is itself an object, this means it is a nested error
     if (messageType === 'object') {
       for (var key in message) {
         if (message.hasOwnProperty(key)) {
-          this.renderServerError(item + '[' + key + ']', message[key]);
+          this.renderServerError(item + '.' + key, message[key]);
         }
       }
     } else {
