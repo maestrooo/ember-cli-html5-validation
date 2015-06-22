@@ -114,7 +114,7 @@ export default Ember.Mixin.create({
    */
   validate: function() {
     var input = this.get('element'),
-        jQueryElement = Ember.$(input);
+      jQueryElement = Ember.$(input);
 
     // According to spec, inputs that have "formnovalidate" should bypass any validation
     if (input.hasAttribute('formnovalidate')) {
@@ -156,8 +156,8 @@ export default Ember.Mixin.create({
    */
   renderErrorMessage: function() {
     var element = this.$(),
-        parent = element.parent(),
-        errorMessage = this.get('errorMessage');
+      parent = element.parent(),
+      errorMessage = this.get('errorMessage');
 
     if (null === errorMessage) {
       parent.removeClass('has-error');
@@ -165,7 +165,7 @@ export default Ember.Mixin.create({
     } else {
       parent.addClass('has-error');
       element.next('.input-error').remove();
-      element.after('<p class="input-error" role="alert">' + errorMessage + '</p>');
+      element.after(`<label class="input-error" role="alert" for="${element.attr("id")}">${errorMessage}</label>`);
     }
   }.observes('errorMessage'),
 
@@ -184,13 +184,13 @@ export default Ember.Mixin.create({
     }
 
     var errorTemplates = this.get('errorTemplates'),
-        type = target.getAttribute('type');
+      type = target.getAttribute('type');
 
     // We first check for the "required" case
     if (target.validity.valueMissing) {
       // For checkbox, we allow to have a title attribute that is shown instead of the
       // required message. Very useful for things like "You must accept our terms"
-      if (type === 'checkbox' && target.hasAttribute('title')) {
+      if (target.hasAttribute('title')) {
         return target.getAttribute('title');
       }
 
