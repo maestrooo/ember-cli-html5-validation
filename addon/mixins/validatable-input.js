@@ -165,7 +165,7 @@ export default Ember.Mixin.create({
     } else {
       parent.addClass('has-error');
       element.next('.input-error').remove();
-      element.after(`<label class="input-error" role="alert" for="${element.attr("id")}">${errorMessage}</label>`);
+      element.after('<label class="input-error" role="alert" for="' + element.attr('id') + '">' + errorMessage + '</label>');
     }
   }.observes('errorMessage'),
 
