@@ -69,9 +69,7 @@ export default Ember.Component.extend({
   observesLoading: function() {
     if (this.get('isLoading')) {
       this.set('isDefault', false);
-    }
-
-    if (!this.get('isLoading')) {
+    } else {
       Ember.run.later(this, function() {
         this.set('isDefault', true);
       }, 1500);
