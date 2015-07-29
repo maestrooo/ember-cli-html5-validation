@@ -62,13 +62,14 @@ export default Ember.Component.extend({
   }.property('isDefault', 'isValid').readOnly(),
 
   /**
+   * Set isDefault to false when isLoading is triggered to disable the button.
    * When the isLoading goes back to "false", we check if the button is in an error state. If that's
    * the case, we enforce the error state, otherwise we switch to "valid"
    */
   observesLoading: function() {
-    if (!this.get('isLoading')) {
+    if (this.get('isLoading')) {
       this.set('isDefault', false);
-
+    } else {
       Ember.run.later(this, function() {
         this.set('isDefault', true);
       }, 1500);
