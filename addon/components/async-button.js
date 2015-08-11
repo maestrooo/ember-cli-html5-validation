@@ -71,7 +71,13 @@ export default Ember.Component.extend({
       this.set('isDefault', false);
     } else {
       Ember.run.later(this, function() {
-        this.set('isDefault', true);
+        /**
+         * Check to make sure set is not called after the component is already destroyed.
+         * This generates an error that causes acceptance tests to fail and is unnecessary.
+        */
+        if (!this.get('isDestroyed')) {
+          this.set('isDefault', true);
+        }
       }, 1500);
     }
   }.observes('isLoading')
