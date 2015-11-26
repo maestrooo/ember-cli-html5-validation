@@ -32,8 +32,19 @@ export default Ember.Component.extend({
    */
   submit: function() {
     var form = this.get('element');
+    var allValidElements = true;
 
-    if (form.checkValidity()) {
+    if(form.checkValidity()) {
+      $('form input, form select, form textarea').each(function(){
+        allValidElements = this.validity.valid;
+        if(!allValidElements) {
+          Ember.$(this).trigger("invalid"); // to highlight invalid field.
+          return false;
+        }
+      });
+    }
+
+    if (form.checkValidity() && allValidElements) {
       this.sendAction('action', this.get('model'));
     } else {
       this.scrollToFirstError();
