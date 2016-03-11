@@ -1,0 +1,1 @@
+export { default } from 'ember-cli-html5-validation/components/validatable-form';
