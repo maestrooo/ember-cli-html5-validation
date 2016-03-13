@@ -1,6 +1,9 @@
 import Ember from 'ember';
+import layout from '../templates/components/form-control';
 
 export default Ember.Component.extend({
+  layout,
+
   /**
    * @param {Array}
    */

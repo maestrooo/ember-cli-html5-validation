@@ -1,6 +1,9 @@
 import Ember from 'ember';
+import layout from '../templates/components/validatable-form';
 
 export default Ember.Component.extend({
+  layout,
+
   /**
    * @type {string}
    */
