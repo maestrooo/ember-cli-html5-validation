@@ -38,25 +38,6 @@ export default Ember.Component.extend({
    */
   isSubmitting: false,
 
-  /**
-   * Handle the submit event only if the form is valid
-   */
-  submit() {
-    if (!this.get('element').checkValidity()) {
-      return false;
-    }
-
-    this.set('isSubmitting', true);
-
-    new Ember.RSVP.Promise((resolve) => {
-      resolve(this.get('onSubmit')());
-    }).then(() => {
-      this.set('isSubmitting', false);
-    });
-
-    return false;
-  },
-
   actions: {
     /**
      * @param {string} inputName
@@ -70,6 +51,25 @@ export default Ember.Component.extend({
       }
 
       this.rerender();
+    },
+
+    /**
+     * Handle the submit event only if the form is valid
+     */
+    submit(eventName) {
+      if (!this.get('element').checkValidity()) {
+        return false;
+      }
+
+      this.set('isSubmitting', true);
+
+      new Ember.RSVP.Promise((resolve) => {
+        resolve(this.get(eventName || 'onSubmit')());
+      }).then(() => {
+        this.set('isSubmitting', false);
+      });
+
+      return false;
     }
   }
 });

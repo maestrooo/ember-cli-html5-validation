@@ -109,7 +109,7 @@ abstraction that allows to know when the form is submitting or not (so you can u
 To do that, you must wrap your inputs around the `validatable-form` component:
 
 ```html
-{{#validatable-form onSubmit=(action 'saveUser') as |component|}}
+{{#validatable-form onSubmit=(action 'saveUser') as |form|}}
   {{#each-in component.errors as |field error|}}
     {{field}}: {{error}}
   {{/each-in}}
@@ -128,7 +128,7 @@ To do that, you must wrap your inputs around the `validatable-form` component:
     <p>Currently saving...</p>
   {{/if}}
   
-  <input type="submit" value="Submit form">
+  <input {{action 'submit' target=form}} value="Submit form">
 {{/validatable-form}}
 ```
 
@@ -145,9 +145,25 @@ the ID for something more meaningful, you can add the `data-field` attribute to 
 {{input type='password' class='form__input' data-field='Password' required=true}}
 ```
 
+The submit button must contain an action name 'submit', and whose target is set to the validatable form. By default, the validatable form component
+will emit the event 'onSubmit', but you can actually override it if your form has multiple actions.
+
+For instance, let's say that your form have one "save" and one "save and activate" button:
+
+```html
+{{#validatable-form onPrimary=(action 'saveAndActivateUser') onSecondary=(action 'saveUser') as |form|}}
+  // ...
+  
+  <input {{action 'submit' 'onSecondary' target=form}} value="Save">
+  <input {{action 'submit' 'onPrimary' target=form}} value="Save and activate">
+{{/validatable-form}}
+```
+
+Your controller can now define the `saveAndActivateUser` and `saveUser` actions to properly handle them.
+
 ### Using with Ember-Data
 
-Version 0.1.* do not offer any Ember Data integration as of today.
+Version 0.2.* do not offer any Ember Data integration as of today.
 
 ### Cookbook
 
