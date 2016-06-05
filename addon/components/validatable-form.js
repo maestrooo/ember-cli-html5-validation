@@ -38,6 +38,26 @@ export default Ember.Component.extend({
    */
   isSubmitting: false,
 
+  /**
+   * Scroll to the first input field that does not pass the validation
+   *
+   * @returns {void}
+   */
+  scrollToFirstError: function() {
+    var form = this.get('element');
+
+    // We get the first element that fails, and scroll to it
+    for (var i = 0 ; i !== form.elements.length ; ++i) {
+      if (!form.elements[i].validity.valid) {
+        Ember.$('html, body').animate({
+          scrollTop: Ember.$(form.elements[i]).offset().top - 40
+        }, 200);
+
+        break;
+      }
+    }
+  },
+
   actions: {
     /**
      * @param {string} inputName
@@ -58,6 +78,7 @@ export default Ember.Component.extend({
      */
     submit(eventName) {
       if (!this.get('element').checkValidity()) {
+        this.scrollToFirstError();
         return false;
       }
 
