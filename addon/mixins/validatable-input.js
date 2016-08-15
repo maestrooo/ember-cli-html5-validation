@@ -131,9 +131,6 @@ export default Ember.Mixin.create({
       this.set('errorMessage', null);
     }
 
-    // We reset the state if we had any custom error, so that they do not "stick" around
-    input.setCustomValidity('');
-
     // If the input was never validated, we attach an additional listener so that validation is
     // run also on keyup. This makes the UX better as it removes error message as you type when
     // you try to fix the errors
